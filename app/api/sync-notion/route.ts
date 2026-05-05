@@ -164,7 +164,7 @@ export async function GET(request: Request) {
                 const p = page.properties;
 
                 const notionId = readText(p["id"]).trim();
-                const title = readText(p["제목"]).trim();
+                const title = readText(p["이름"]).trim();
 
                 if (!notionId || !title) {
                     return null;
@@ -186,19 +186,9 @@ export async function GET(request: Request) {
             .filter(isSongUpsertRow);
 
         if (rows.length === 0) {
-            const firstProperties = pages[0]?.properties ?? {};
-
             return Response.json({
                 ok: false,
                 error: "No valid rows found. Check Notion property names.",
-                pageCount: pages.length,
-                propertyNames: Object.keys(firstProperties),
-                propertyTypes: Object.fromEntries(
-                    Object.entries(firstProperties).map(([key, value]: [string, any]) => [
-                        key,
-                        value?.type,
-                    ])
-                ),
             });
         }
 
